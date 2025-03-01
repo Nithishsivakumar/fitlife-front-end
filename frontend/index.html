@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fitness Tracking Website</title>
+  <style>
+    /* Global Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; line-height: 1.6; background-color: #f9f9f9; color: #333; }
+    
+    /* Sidebar Styling */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100vh;
+      background-color: #2c3e50;
+      color: #fff;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .sidebar .logo img {
+      width: 100%;
+      max-width: 150px;
+      margin-bottom: 20px;
+    }
+    .sidebar ul { list-style: none; }
+    .sidebar ul li { margin: 15px 0; }
+    .sidebar ul li a {
+      color: #fff; text-decoration: none; font-size: 18px;
+      transition: color 0.3s ease;
+    }
+    .sidebar ul li a:hover { color: #1abc9c; }
+    
+    /* Social Media Logos in Sidebar */
+    .social-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .social-logo {
+      width: 30px;
+      height: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .social-logo:hover {
+      transform: scale(1.1);
+    }
+
+    /* Main Content Area */
+    .main-content { margin-left: 270px; padding: 20px; }
+    .section {
+      display: none;
+      padding: 20px;
+      background-color: #fff;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .section.active { display: block; }
+    
+    /* Login Section */
+    .login-section .container { display: flex; justify-content: space-between; align-items: center; }
+    .login-section .left-section { flex: 1; margin-right: 20px; }
+    .login-section .right-section { flex: 1; text-align: center; }
+    .login-form {
+      background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center;
+    }
+    .login-header {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #2c3e50;
+      background: linear-gradient(45deg, rgba(255, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-align: center;
+    }
+    .input-field {
+      width: 100%; padding: 10px; margin-bottom: 15px;
+      border: 1px solid #ccc; border-radius: 5px; font-size: 1rem;
+    }
+    .input-field:focus { border-color: #1abc9c; outline: none; }
+    .login-button, .signup-button {
+      background-color: #1abc9c; color: #fff; border: none; padding: 10px 20px; font-size: 1rem;
+      border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;
+    }
+    .login-button:hover, .signup-button:hover { background-color: #16a085; }
+    
+    /* Home Section */
+    .home-section { text-align: center; }
+    .home-section img {
+      width: 100%; max-height: 400px; object-fit: cover; margin-bottom: 20px;
+    }
+    .home-section .content {
+      text-align: left; max-width: 800px; margin: 0 auto;
+      background: repeating-linear-gradient(
+          45deg,
+          rgba(255, 0, 0, 0.8),
+          rgba(255, 0, 0, 0.8) 10px,
+          rgba(0, 0, 0, 0.8) 10px,
+          rgba(0, 0, 0, 0.8) 20px
+      );
+      color: #fff;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .home-section .join-home {
+      background-color: #1abc9c; color: #fff; border: none; padding: 10px 20px;
+      font-size: 1.2rem; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;
+      background: repeating-linear-gradient(
+          45deg,
+          rgba(255, 0, 0, 0.8),
+          rgba(255, 0, 0, 0.8) 10px,
+          rgba(0, 0, 0, 0.8) 10px,
+          rgba(0, 0, 0, 0.8) 20px
+      );
+    }
+    .home-section .join-home:hover { background-color: #16a085; }
+    
+    /* About Section */
+    .about-section { max-width: 900px; margin: 0 auto; }
+    .about-section h2 { text-align: center; margin-bottom: 20px; }
+    .about-section .subsection-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .about-section .subsection {
+      width: 250px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 8px;
+      background: linear-gradient(45deg, rgba(255, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+      color: #fff;
+    }
+    .about-section .subsection img {
+      width: 100%; max-width: 200px; height: auto; margin-bottom: 10px;
+    }
+    .about-section details {
+      border: 2px solid #2196F3; border-radius: 8px; overflow: hidden;
+      transition: border-color 0.3s ease; background-color: #e3f2fd;
+      width: 100%; max-width: 400px; margin: 0 auto;
+    }
+    
+    .about-section summary {
+      background-color: rgba(0,0,255,0.7);
+      color: white;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 14px;
+      padding: 6px 10px;
+      display: inline-block;
+      transition: background-color 0.3s ease;
+    }
+    .about-section summary:hover { background-color: rgba(0,0,255,0.9); }
+    .about-section details p { padding: 10px; color: #333; }
+    
+    /* Contact Section */
+    .contact-section { max-width: 600px; margin: 0 auto; }
+    .contact-section h2 { 
+      text-align: center; 
+      margin-bottom: 20px; 
+      background: linear-gradient(45deg, rgba(255, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .contact-info { font-size: 1.1rem; line-height: 1.8; }
+    .contact-info p { margin-bottom: 10px; }
+    
+    /* Settings Section */
+    .settings-section { max-width: 800px; margin: 0 auto; }
+    .settings-section h2 { 
+      text-align: center; 
+      margin-bottom: 20px; 
+      background: linear-gradient(45deg, rgba(255, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .settings-section ul { list-style: disc; padding-left: 20px; }
+    .settings-section li { margin-bottom: 10px; }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .main-content { margin-left: 0; }
+      .login-section .container { flex-direction: column; }
+      .home-section img { max-height: 300px; }
+      .social-logos { flex-direction: column; }
+      .social-logo { width: 25px; }
+    }
+        
+    /* Wrap the three subsections side by side */
+    .about-section .subsection-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    /* Force each subsection to a fixed width so they appear in parallel */
+    .about-section .subsection {
+      width: 250px; /* Adjust as needed */
+    }
+    /* Make summary "buttons" smaller */
+    .about-section summary {
+      display: inline-block;       /* No longer stretches full width */
+      font-size: 14px;             /* Smaller font */
+      padding: 6px 10px;           /* Less padding for a smaller button feel */
+    }
+
+    
+    /* For Red+Black Pattern */
+    .login-header {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #2c3e50;
+        background: linear-gradient(45deg, rgba(255, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-align: center;
+    }
+
+    .home-section .content, .home-section .join-home {
+        background: repeating-linear-gradient(
+            45deg,
+            rgba(255, 0, 0, 0.8),
+            rgba(255, 0, 0, 0.8) 10px,
+            rgba(0, 0, 0, 0.8) 10px,
+            rgba(0, 0, 0, 0.8) 20px
+        );
+        color: #fff;
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    .about-section .subsection {
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+        background: linear-gradient(45deg, rgba(255, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+        color: #fff;
+    }
+
+    .contact-section h2, .settings-section h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        background: linear-gradient(45deg, rgba(255, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    /* For Blue+Black Pattern (Uncomment or replace red patterns with these if desired) */
+    /*
+    .login-header {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #2c3e50;
+        background: linear-gradient(45deg, rgba(0, 0, 255, 0.7), rgba(0, 0, 0, 0.7));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-align: center;
+    }
+
+    .home-section .content, .home-section .join-home {
+        background: repeating-linear-gradient(
+            45deg,
+            rgba(0, 0, 255, 0.8),
+            rgba(0, 0, 255, 0.8) 10px,
+            rgba(0, 0, 0, 0.8) 10px,
+            rgba(0, 0, 0, 0.8) 20px
+        );
+        color: #fff;
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    .about-section .subsection {
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+        background: linear-gradient(45deg, rgba(0, 0, 255, 0.5), rgba(0, 0, 0, 0.5));
+        color: #fff;
+    }
+
+    .contact-section h2, .settings-section h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        background: linear-gradient(45deg, rgba(0, 0, 255, 0.7), rgba(0, 0, 0, 0.7));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    */
+  </style>
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <div class="sidebar">
+    <div class="logo">
+      <img src="https://i.ibb.co/G4SjDJ8f/new-gym-logo.jpg" alt="new-gym-logo" border="0">
+    </div>
+    <ul>
+      <li><a href="#" data-target="login">Login</a></li>
+      <li><a href="#" data-target="home">Home</a></li>
+      <li><a href="#" data-target="about">About</a></li>
+      <li><a href="#" data-target="contact">Contact Us</a></li>
+      <li><a href="#" data-target="settings">Settings</a></li>
+    </ul>
+    <div class="social-logos">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png" alt="Instagram Logo" class="social-logo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1200px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube Logo" class="social-logo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1200px-Facebook_f_logo_%282019%29.svg.png" alt="Facebook Logo" class="social-logo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp Logo" class="social-logo">
+    </div>
+  </div>
+  
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <!-- Login Section -->
+    <section id="login" class="section active login-section">
+      <div class="container">
+        <div class="left-section">
+          <h1>Fitness Tracking Website</h1>
+          <p>Achieve your fitness goals with our comprehensive tracking platform.</p>
+        </div>
+        <div class="right-section">
+          <div class="login-header">Login to Your Fitness Journey</div>
+          <div class="login-form">
+            <input type="text" placeholder="Username or Email" class="input-field">
+            <input type="password" placeholder="Password" class="input-field">
+            <button class="login-button">Login</button>
+            <div class="signup-link">
+              <p>New to fitness tracking?</p>
+              <button class="signup-button">Sign Up Here</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Home Section -->
+    <section id="home" class="section home-section">
+      <!-- Only the first image is used -->
+      <img src="https://i.ibb.co/vvhQYW9n/canva-bright-yellow-and-black-photographic-fitness-servicew-e-d3-NUFXk-Mdr8.jpg" alt="Fitness Banner">
+      <div class="content">
+        <h2>Welcome to FitLife Gym</h2>
+        <p>At FitLife Gym, we believe in a holistic approach to fitness. Our state-of-the-art facility, expert trainers, and personalized programs are designed to help you achieve your goals.</p>
+        <p>Experience a community that motivates, supports, and celebrates every milestone. Join us today and transform your lifestyle.</p>
+        <!-- Join Us button appears only on the Home page -->
+        <button class="join-home">Join Us</button>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/pdng0vWx5y8?si=xYoinmugtuNBUgtM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      </div>
+    </section>
+    
+    <!-- About Section -->
+    <section id="about" class="section about-section">
+      <h2>About Us</h2>
+      <!-- NEW wrapper so the three images are parallel -->
+      <div class="subsection-container">
+        <!-- Weight Loss Subsection -->
+        <div class="subsection">
+          <img src="https://i.ibb.co/3YdyfccS/weightloss.png" alt="Weight Loss">
+          <details>
+            <summary>Weight Loss Strategies</summary>
+            <p>1. Balanced Diet: Focus on whole foods.</p>
+            <p>2. Portion Control: Use smaller plates.</p>
+            <p>3. Stay Hydrated: Drink plenty of water.</p>
+            <p>4. Regular Exercise: Combine cardio with strength training.</p>
+            <p>5. Consistent Meal Times: Regulate your metabolism.</p>
+            <p>6. Mindful Eating: Eat slowly and without distractions.</p>
+            <p>7. Get Enough Sleep: Ensure proper rest.</p>
+            <p>8. Reduce Stress: Practice relaxation techniques.</p>
+            <p>9. Track Progress: Monitor your food intake and workouts.</p>
+            <p>10. Stay Consistent: Patience is key to sustainable results.</p>
+          </details>
+        </div>
+        <!-- Weight Gain Subsection -->
+        <div class="subsection">
+          <img src="https://i.ibb.co/G4g2Zf8K/IMG-20250217-202241.jpg" alt="Healthy Weight Gain">
+          <details>
+            <summary>Healthy Weight Gain Tips</summary>
+            <p>1. Calorie Surplus: Consume more calories than you burn.</p>
+            <p>2. Frequent Meals: Eat 5–6 smaller meals daily.</p>
+            <p>3. High-Calorie Foods: Include nutrient-rich options.</p>
+            <p>4. Protein Intake: Support muscle growth with lean proteins.</p>
+            <p>5. Healthy Fats: Incorporate sources like olive oil and avocados.</p>
+            <p>6. Strength Training: Build muscle mass effectively.</p>
+            <p>7. Smoothies: Enhance your diet with nutrient-packed shakes.</p>
+            <p>8. Avoid Empty Calories: Limit sugary and junk foods.</p>
+            <p>9. Stay Hydrated: Maintain adequate water intake.</p>
+            <p>10. Rest Properly: Allow time for muscle recovery.</p>
+          </details>
+        </div>
+        <!-- Nutrition Subsection -->
+        <div class="subsection">
+          <img src="https://i.ibb.co/q3Dnt7YN/IMG-20250217-204657.jpg" alt="Nutrition Guide">
+          <details>
+            <summary>Nutrition Tips for Fitness</summary>
+            <p>1. Balanced Macronutrients: Ensure proper distribution of carbs, proteins, and fats.</p>
+            <p>2. Pre-Workout Nutrition: Fuel your body before exercise.</p>
+            <p>3. Post-Workout Recovery: Refuel with proteins and carbs.</p>
+            <p>4. Hydration: Drink water throughout the day.</p>
+            <p>5. Micronutrients: Include vitamins and minerals in your diet.</p>
+            <p>6. Meal Timing: Eat at regular intervals.</p>
+            <p>7. Whole Foods: Focus on unprocessed, natural foods.</p>
+            <p>8. Supplements: Consider when necessary.</p>
+            <p>9. Listen to Your Body: Adjust your diet based on needs.</p>
+            <p>10. Consistency: Maintain a regular eating pattern.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="section contact-section">
+      <h2>Contact Us</h2>
+      <div class="contact-info">
+        <p><strong>Owner:</strong> Santhoush kumar</p>
+        <p><strong>Gym Name:</strong> FitLife Gym</p>
+        <p><strong>Email:</strong> contact@fitlifegym.com</p>
+        <p><strong>Contact Number:</strong> 86600-86600</p>
+        <p><strong>Address: No 45 2nd floor, Dharga Rd, Zamin Pallavaram, Rajaji Nagar, Pallavaram, Chennai, Tamil Nadu 600043</p>
+        <p>Feel free to reach out for membership inquiries, facility tours, or any questions you may have.</p>
+      <P><strong>Hours:</strong> 
+        Friday	5 am–9:30 pm
+        Saturday	5 am–9:30 pm
+        Sunday	5:30 am–12 pm
+        Monday	5 am–9:30 pm
+        Tuesday	5 am–9:30 pm
+        Wednesday	5 am–9:30 pm
+        Thursday	5 am–9:30 pm
+        Suggest new hours</P>  
+     </div>
+    </section>
+    
+    <!-- Settings Section -->
+    <section id="settings" class="section settings-section">
+      <h2>Settings</h2>
+      <p>Customize your experience to suit your fitness journey. Adjust the following settings:</p>
+      <ul>
+        <li>Notification Preferences: Get alerts for new classes and special offers.</li>
+        <li>Workout Reminders: Set daily or weekly reminders.</li>
+        <li>Privacy Settings: Control what information is shared with others.</li>
+        <li>Profile Customization: Update your profile with your fitness goals.</li>
+        <li>Theme Selection: Choose between light and dark mode.</li>
+      </ul>
+    </section>
+  </div>
+  
+  <!-- Navigation Script -->
+  <script>
+    document.querySelectorAll('a[data-target]').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = this.getAttribute('data-target');
+        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(target).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
